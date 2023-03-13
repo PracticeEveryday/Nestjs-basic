@@ -1,0 +1,45 @@
+{
+    "compilerOptions": {
+        "target": "es2017",
+        // Strict mode (9)
+        "strict": true,
+        "alwaysStrict": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true,
+        "strictBindCallApply": true,
+        "strictFunctionTypes": true,
+        "experimentalDecorators": true,
+        "useUnknownInCatchVariables": true,
+        "strictPropertyInitialization": true,
+
+        // No unused code (4)
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "allowUnusedLabels": false,
+        "allowUnreachableCode": false,
+
+        // No implicit code (2)
+        "noImplicitOverride": true,
+        "noImplicitReturns": true,
+
+        // Others (5)
+        "noUncheckedIndexedAccess": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "noFallthroughCasesInSwitch": true,
+        "exactOptionalPropertyTypes": true,
+        "forceConsistentCasingInFileNames": true,
+        "module": "commonjs",
+
+        "baseUrl": "./",
+        "outDir": "./dist",
+        "sourceMap": true,
+        "declaration": true,
+        "incremental": true,
+        "skipLibCheck": true,
+        "removeComments": true,
+        "esModuleInterop": true,
+        "emitDecoratorMetadata": true,
+        "allowSyntheticDefaultImports": true
+    }
+}
