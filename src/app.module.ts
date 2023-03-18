@@ -1,12 +1,12 @@
 import Joi from 'joi';
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 import { UserModule } from './api/user/user.module';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/exception/http-exception.filter';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
     imports: [

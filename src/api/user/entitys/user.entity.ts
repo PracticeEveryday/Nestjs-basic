@@ -24,6 +24,6 @@ export class UserEntity extends BaseEntity {
     @IsString()
     @IsNotEmpty()
     @ApiProperty({ example: '1234', required: true })
-    @Column({ type: 'text', nullable: false, select: false, comment: '유저 비밀 번호' })
+    @Column({ type: 'text', nullable: false, comment: '유저 비밀 번호' })
     password: string;
 }
