@@ -1,3 +1,4 @@
 export enum InjectionToken {
     MAIN_DATABASE = 'MAIN_MYSQL_PROVIDER',
+    USER_REPOSITORY = 'USER_REPOSITORY',
 }
