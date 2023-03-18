@@ -1,10 +1,11 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
-import { AuthService } from 'src/auth/auth.service';
-import { comparePassword, hashPassword } from 'src/common/utils/hash-password.utils';
+import { AuthService } from '@/auth/auth.service';
+import { comparePassword, hashPassword } from '@/common/utils/hash-password.utils';
+
 import { SignInReqDto } from './dtos/request/sign-in.req.dto';
 import { SignUpReqDto } from './dtos/request/sign-up.req.dto';
-import { UserEntity } from './entitys/user.entity';
 import { UserRepository } from './repository/user.repository';
+import { UserEntity } from './entitys/user.entity';
 
 @Injectable()
 export class UserService {
