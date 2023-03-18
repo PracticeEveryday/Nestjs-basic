@@ -4,9 +4,6 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity('users')
 export class UserEntity extends BaseEntity {
     @PrimaryGeneratedColumn()
-    id: string;
-
-    @Column({ type: 'uuid' })
     userId: string;
 
     @Column({ length: 50, nullable: false, default: '', comment: '유저 이메일' })
