@@ -6,13 +6,13 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity('users')
 export class UserEntity extends BaseEntity {
     @PrimaryGeneratedColumn()
-    userId: string;
+    userId: number;
 
     @IsEmail()
     @IsString()
     @IsNotEmpty()
     @ApiProperty({ example: 'test@test.com', required: true })
-    @Column({ length: 50, nullable: false, default: '', comment: '유저 이메일' })
+    @Column({ length: 50, nullable: false, default: '', comment: '유저 이메일', unique: true })
     email: string;
 
     @IsString()

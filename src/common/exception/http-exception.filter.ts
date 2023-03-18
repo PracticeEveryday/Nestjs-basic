@@ -8,7 +8,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
         const response = ctx.getResponse<Response>();
         const request = ctx.getRequest<Request>();
         let statusCode = exception.getStatus();
-
         let error: unknown;
 
         if (exception instanceof UnauthorizedException) {
