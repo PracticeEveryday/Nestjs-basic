@@ -1,12 +1,12 @@
 import { DataSource } from 'typeorm';
 import { InjectionToken } from './injection.token';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
+import { Provider } from '@nestjs/common';
 
-export const databaseProviders = [
+export const databaseProviders: Provider[] = [
     {
         provide: InjectionToken.MAIN_DATABASE,
-        imports: [ConfigModule],
         inject: [ConfigService],
         useFactory: async (configService: ConfigService) => {
             const host = configService.get<string>('DB_HOST') || '';
@@ -21,7 +21,7 @@ export const databaseProviders = [
                 username,
                 password,
                 database,
-                // entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+                entities: [__dirname + '/../**/*.entity{.ts,.js}'],
                 synchronize: true,
                 namingStrategy: new SnakeNamingStrategy(),
             });
