@@ -28,7 +28,7 @@ export class UserService {
         return user;
     };
 
-    public async signIn(signInDto: SignInReqDto) {
+    public async signIn(signInDto: SignInReqDto): Promise<{ token: string }> {
         const user = await this.userRepository.findOneByEmail(signInDto.email);
         if (!user) {
             throw new UnauthorizedException('해당 이메일로 가입된 유저가 없습니다.');
@@ -40,6 +40,6 @@ export class UserService {
             throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
         }
         const token = this.authService.signToken(user.userId);
-        return token;
+        return { token };
     }
 }
