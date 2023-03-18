@@ -11,19 +11,19 @@ export class UserEntity extends BaseEntity {
     @IsEmail()
     @IsString()
     @IsNotEmpty()
-    @ApiProperty({ example: 'test@test.com' })
+    @ApiProperty({ example: 'test@test.com', required: true })
     @Column({ length: 50, nullable: false, default: '', comment: '유저 이메일' })
     email: string;
 
     @IsString()
     @IsNotEmpty()
-    @ApiProperty({ example: '김동현' })
+    @ApiProperty({ example: '김동현', required: true })
     @Column({ length: 20, nullable: false, default: '', comment: '유저 이름' })
     userName: string;
 
     @IsString()
     @IsNotEmpty()
-    @ApiProperty({ example: '1234' })
+    @ApiProperty({ example: '1234', required: true })
     @Column({ type: 'text', nullable: false, select: false, comment: '유저 비밀 번호' })
     password: string;
 }
