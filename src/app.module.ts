@@ -3,10 +3,11 @@ import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
 import { UserModule } from './api/user/user.module';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/exception/http-exception.filter';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { AuthModule } from './auth/auth.module';
+import { HttpResponseInterceptor } from './common/interceptor/http-response.interceptor';
 
 @Module({
     imports: [
@@ -29,10 +30,8 @@ import { AuthModule } from './auth/auth.module';
         UserModule,
     ],
     providers: [
-        {
-            provide: APP_FILTER,
-            useClass: HttpExceptionFilter,
-        },
+        { provide: APP_FILTER, useClass: HttpExceptionFilter },
+        { provide: APP_INTERCEPTOR, useClass: HttpResponseInterceptor },
     ],
 })
 export class AppModule {
