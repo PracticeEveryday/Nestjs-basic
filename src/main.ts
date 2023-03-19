@@ -21,7 +21,7 @@ async function bootstrap() {
     const configService = app.get(ConfigService);
     const PORT = configService.get('PORT');
 
-    if (PORT && typeof PORT === 'string') {
+    if (PORT && typeof PORT === 'number') {
         await app.listen(PORT);
         console.log(`Application is running on: ${await app.getUrl()}`);
     }

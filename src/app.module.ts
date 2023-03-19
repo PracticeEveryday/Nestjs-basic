@@ -34,26 +34,38 @@ import { DatabaseModule } from './database/database.module';
         }),
         WinstonModule.forRoot({
             transports: [
-                // 콘솔 로그의 로그를 남기는 경우임.
                 new winston.transports.Console({
                     format: winston.format.combine(
-                        // 여러 방식을 섞을 수 있음.
                         winston.format.timestamp(), // timestamp를 찍을거고
                         winston.format.ms(), // ms 단위로 찍을거야
 
-                        // 로그를 nestjs 방식으로 쓸 것임.
-                        nestWinstonModuleUtilities.format.nestLike('MyApp', {
+                        nestWinstonModuleUtilities.format.nestLike('PracticeApp', {
                             colors: true,
                             prettyPrint: true,
                         })
                     ),
                 }),
                 new DailyRotateFile({
-                    dirname: path.join(process.cwd(), './logs'),
+                    level: 'info',
+                    maxFiles: 7,
+                    maxSize: '10mb',
                     filename: '%DATE%.log',
                     datePattern: 'YYYY-MM-DD',
+                    zippedArchive: true,
+                    dirname: path.join(process.cwd(), './logs'),
+                    format: winston.format.combine(
+                        winston.format.timestamp({ format: 'YYYY-MM-DD hh:mm:ss' }),
+                        winston.format.printf((info) => `[${info['timestamp']}] ${info.level}: ${info.message}`)
+                    ),
+                }),
+                new DailyRotateFile({
+                    level: 'error',
+                    maxFiles: 7,
                     maxSize: '10mb',
-                    maxFiles: '7d', // 1주,
+                    zippedArchive: true,
+                    datePattern: 'YYYY-MM-DD',
+                    filename: `%DATE%.error.log`,
+                    dirname: path.join(process.cwd(), './logs/error'),
                     format: winston.format.combine(
                         winston.format.timestamp({ format: 'YYYY-MM-DD hh:mm:ss' }),
                         winston.format.printf((info) => `[${info['timestamp']}] ${info.level}: ${info.message}`)
