@@ -5,6 +5,11 @@
     "author": "",
     "private": true,
     "license": "UNLICENSED",
+    "husky": {
+        "hooks": {
+          "pre-commit": "yarn test"
+        }
+      },
     "scripts": {
         "prebuild": "rimraf dist",
         "build": "nest build",
