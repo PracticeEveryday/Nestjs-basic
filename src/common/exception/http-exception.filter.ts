@@ -39,7 +39,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
             method: request.method,
             error: error || null,
         };
-        this.logger.error(`${errorResponse.timestamp}: [${errorResponse.method} ${errorResponse.path}] ${errorResponse.error['message']}`);
+        this.logger.error(
+            `${errorResponse.timestamp} [ip: ${request.ip} ${errorResponse.method} ${errorResponse.path}] ${errorResponse.error['message']}`
+        );
         console.error('errorResponse', errorResponse);
 
         response.status(statusCode).json(errorResponse);
