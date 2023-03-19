@@ -9,7 +9,7 @@ import { WinstonModule, utilities as nestWinstonModuleUtilities } from 'nest-win
 import winston from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 
-import { UserModule } from './api/user/user.module';
+import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { HttpExceptionFilter } from './common/exception/http-exception.filter';
 import { HttpResponseInterceptor } from './common/interceptor/http-response.interceptor';

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { DatabaseModule } from '🔥/database/database.module';
 
-import { userProviders } from './provoder/user.provider';
+import { userProviders } from './provider/user.provider';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 

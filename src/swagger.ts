@@ -20,7 +20,7 @@ export function setupSwagger(app: INestApplication): void {
     const swaggerInfo = fs.readFileSync('swagger-info.md', 'utf-8');
 
     const options = new DocumentBuilder()
-        .setTitle('nestjs-startkit')
+        .setTitle('nestjsbasic')
         .setDescription(swaggerInfo)
         .setVersion('0.0.1')
         .addBearerAuth(
