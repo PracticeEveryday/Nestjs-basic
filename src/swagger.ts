@@ -1,7 +1,7 @@
+import * as fs from 'fs';
+
 import { INestApplication } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-
-import * as fs from 'fs';
 import basicAuth from 'express-basic-auth';
 
 export function setupSwagger(app: INestApplication): void {

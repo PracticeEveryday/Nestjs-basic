@@ -1,8 +1,9 @@
-import { DataSource } from 'typeorm';
-import { InjectionToken } from './injection.token';
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import { ConfigService } from '@nestjs/config';
 import { Provider } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { DataSource } from 'typeorm';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+
+import { InjectionToken } from './injection.token';
 
 export const databaseProviders: Provider[] = [
     {

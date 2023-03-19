@@ -1,8 +1,9 @@
-import { UserDomain } from '@/domain/user.domain';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { BaseEntity } from 'src/database/base.entity';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+import { UserDomain } from '🔥/domain/user.domain';
 
 @Entity('users')
 export class UserEntity extends BaseEntity implements UserDomain {
