@@ -1,5 +1,6 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Inject, LoggerService, Post } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { AuthService } from './auth.service';
 import { SignInReqDto } from './dtos/request/sign-in.req.dto';
@@ -10,7 +11,7 @@ import { SignUpResDto } from './dtos/response/sign-up.res.dto';
 @Controller('auth')
 @ApiTags('Auth API')
 export class AuthController {
-    constructor(private authService: AuthService) {}
+    constructor(private authService: AuthService, @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService) {}
 
     @Post('/sign-up')
     @ApiOperation({ summary: '회원 가입' })
@@ -29,6 +30,7 @@ export class AuthController {
         type: SignInResDto,
     })
     public async signIn(@Body() signInDto: SignInReqDto): Promise<SignInResDto> {
+        this.logger.log('로그인 로그!');
         return await this.authService.signIn(signInDto);
     }
 }

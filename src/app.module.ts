@@ -1,7 +1,12 @@
+import path from 'path';
+
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import Joi from 'joi';
+import { WinstonModule, utilities as nestWinstonModuleUtilities } from 'nest-winston';
+import winston from 'winston';
+import DailyRotateFile from 'winston-daily-rotate-file';
 
 import { UserModule } from './api/user/user.module';
 import { AuthModule } from './auth/auth.module';
@@ -25,6 +30,36 @@ import { DatabaseModule } from './database/database.module';
                 REDIS_HOST: Joi.string(),
                 REDIS_PORT: Joi.number(),
             }),
+        }),
+        WinstonModule.forRoot({
+            transports: [
+                // 콘솔 로그의 로그를 남기는 경우임.
+                new winston.transports.Console({
+                    format: winston.format.combine(
+                        // 여러 방식을 섞을 수 있음.
+                        winston.format.timestamp(), // timestamp를 찍을거고
+                        winston.format.ms(), // ms 단위로 찍을거야
+
+                        // 로그를 nestjs 방식으로 쓸 것임.
+                        nestWinstonModuleUtilities.format.nestLike('MyApp', {
+                            colors: true,
+                            prettyPrint: true,
+                        })
+                    ),
+                }),
+                new DailyRotateFile({
+                    dirname: path.join(process.cwd(), './logs'),
+                    filename: '%DATE%.log',
+                    datePattern: 'YYYY-MM-DD',
+                    maxSize: '10mb',
+                    maxFiles: '7d', // 1주,
+                    format: winston.format.combine(
+                        winston.format.timestamp({ format: 'YYYY-MM-DD hh:mm:ss' }),
+                        winston.format.printf((info) => `[${info['timestamp']}] ${info.level}: ${info.message}`)
+                    ),
+                }),
+            ],
+            // other options
         }),
         AuthModule,
         DatabaseModule,
