@@ -1,14 +1,14 @@
 import { Repository } from 'typeorm';
 import { Injectable, Inject } from '@nestjs/common';
 import { InjectionToken } from 'src/database/injection.token';
-import { UserEntity } from '../entitys/user.entity';
+import { UserEntity } from '../../api/user/entitys/user.entity';
 import { SignUpReqDto } from '../dtos/request/sign-up.req.dto';
 
 @Injectable()
-export class UserRepository {
+export class AuthRepository {
     constructor(
         @Inject(InjectionToken.USER_REPOSITORY)
-        private userRepository: Repository<UserEntity>
+        private authRepository: Repository<UserEntity>
     ) {}
 
     public signUp = async (signUpDto: SignUpReqDto): Promise<UserEntity> => {
@@ -17,16 +17,16 @@ export class UserRepository {
         newUser.password = signUpDto.password;
         newUser.userName = signUpDto.userName;
 
-        await this.userRepository.save(newUser);
+        await this.authRepository.save(newUser);
 
         return newUser;
     };
 
     public findOneByEmail = async (email: string): Promise<UserEntity | null> => {
-        return await this.userRepository.findOne({ where: { email } });
+        return await this.authRepository.findOne({ where: { email } });
     };
 
     public findOneById = async (userId: number): Promise<UserEntity | null> => {
-        return await this.userRepository.findOne({ where: { userId } });
+        return await this.authRepository.findOne({ where: { userId } });
     };
 }

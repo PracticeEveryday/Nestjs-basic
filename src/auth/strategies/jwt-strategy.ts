@@ -5,8 +5,8 @@ import { PassportStrategy } from '@nestjs/passport';
 
 // payload
 import { ConfigService } from '@nestjs/config';
-import { UserService } from 'src/api/user/user.service';
 import { JwtPayload } from 'jsonwebtoken';
+import { AuthService } from '../auth.service';
 
 export type CustomPayload = JwtPayload & {
     userId: number;
@@ -14,7 +14,7 @@ export type CustomPayload = JwtPayload & {
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-    constructor(configService: ConfigService, @Inject(UserService) private userService: UserService) {
+    constructor(configService: ConfigService, @Inject(AuthService) private authService: AuthService) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
@@ -24,7 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
     async validate(payload: CustomPayload) {
         const { userId } = payload;
-        const user = this.userService.findOneById(userId);
+        const user = this.authService.findOneById(userId);
 
         if (!user) throw new UnauthorizedException();
 
