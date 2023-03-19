@@ -5,11 +5,6 @@
     "author": "",
     "private": true,
     "license": "UNLICENSED",
-    "husky": {
-        "hooks": {
-            "pre-commit": "yarn test"
-        }
-    },
     "scripts": {
         "prepare": "husky install",
         "prebuild": "rimraf dist",
