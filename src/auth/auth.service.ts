@@ -1,5 +1,7 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, LoggerService, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+// import { Cron } from '@nestjs/schedule';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { comparePassword, hashPassword } from '🔥/common/utils/hash-password.utils';
 import { UserEntity } from '🔥/database/entitys/user.entity';
@@ -10,9 +12,14 @@ import { AuthRepositoryImpl } from './repository/auth.repository';
 
 @Injectable()
 export class AuthService {
-    constructor(private jwtService: JwtService, private authRepository: AuthRepositoryImpl) {}
+    constructor(
+        private jwtService: JwtService,
+        private authRepository: AuthRepositoryImpl,
+        @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService
+    ) {}
 
     public async signUp(signUpDto: SignUpReqDto): Promise<UserEntity> {
+        this.logger.log('회원 가입');
         const user = await this.authRepository.findOneByEmail(signUpDto.email);
         if (user) {
             throw new BadRequestException('해당 이메일은 이미 사용중입니다.');
@@ -51,4 +58,9 @@ export class AuthService {
 
         return token;
     }
+
+    // @Cron('* * * * *')
+    // handleCron() {
+    //     this.logger.log(`1분 마다 실행`);
+    // }
 }

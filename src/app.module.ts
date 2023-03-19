@@ -3,6 +3,7 @@ import path from 'path';
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { ScheduleModule } from '@nestjs/schedule';
 import Joi from 'joi';
 import { WinstonModule, utilities as nestWinstonModuleUtilities } from 'nest-winston';
 import winston from 'winston';
@@ -59,8 +60,8 @@ import { DatabaseModule } from './database/database.module';
                     ),
                 }),
             ],
-            // other options
         }),
+        ScheduleModule.forRoot(),
         AuthModule,
         DatabaseModule,
         UserModule,
