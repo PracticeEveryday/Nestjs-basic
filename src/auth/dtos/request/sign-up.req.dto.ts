@@ -1,4 +1,4 @@
 import { PickType } from '@nestjs/swagger';
-import { UserEntity } from '../../../api/user/entitys/user.entity';
+import { UserDto } from '@/common/dto/user.dto';
 
-export class SignUpReqDto extends PickType(UserEntity, ['email', 'password', 'userName'] as const) {}
+export class SignUpReqDto extends PickType(UserDto, ['email', 'password', 'userName'] as const) {}

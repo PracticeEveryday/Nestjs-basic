@@ -1,11 +1,13 @@
 import { Repository } from 'typeorm';
 import { Injectable, Inject } from '@nestjs/common';
 import { InjectionToken } from 'src/database/injection.token';
-import { UserEntity } from '../../api/user/entitys/user.entity';
+
 import { SignUpReqDto } from '../dtos/request/sign-up.req.dto';
+import { UserEntity } from '@/database/entitys/user.entity';
+import { AuthRepository } from '@/domain/user.domain';
 
 @Injectable()
-export class AuthRepository {
+export class AuthRepositoryImpl implements AuthRepository {
     constructor(
         @Inject(InjectionToken.USER_REPOSITORY)
         private authRepository: Repository<UserEntity>

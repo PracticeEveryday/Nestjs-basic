@@ -1,11 +1,11 @@
+import { UserDomain } from '@/domain/user.domain';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { BaseEntity } from 'src/database/base.entity';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from '../interfaces/user.interface';
 
 @Entity('users')
-export class UserEntity extends BaseEntity implements User {
+export class UserEntity extends BaseEntity implements UserDomain {
     @PrimaryGeneratedColumn()
     userId: number;
 

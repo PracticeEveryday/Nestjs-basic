@@ -1,6 +1,6 @@
 import { InjectionToken } from 'src/database/injection.token';
 import { DataSource } from 'typeorm';
-import { UserEntity } from '../entitys/user.entity';
+import { UserEntity } from '../../../database/entitys/user.entity';
 
 export const userProviders = [
     {

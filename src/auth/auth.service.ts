@@ -1,16 +1,16 @@
-import { User } from '@/api/user/interfaces/user.interface';
 import { comparePassword, hashPassword } from '@/common/utils/hash-password.utils';
+import { UserEntity } from '@/database/entitys/user.entity';
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { SignInReqDto } from './dtos/request/sign-in.req.dto';
 import { SignUpReqDto } from './dtos/request/sign-up.req.dto';
-import { AuthRepository } from './repository/auth.repository';
+import { AuthRepositoryImpl } from './repository/auth.repository';
 
 @Injectable()
 export class AuthService {
-    constructor(private jwtService: JwtService, private authRepository: AuthRepository) {}
+    constructor(private jwtService: JwtService, private authRepository: AuthRepositoryImpl) {}
 
-    public async signUp(signUpDto: SignUpReqDto): Promise<User> {
+    public async signUp(signUpDto: SignUpReqDto): Promise<UserEntity> {
         const user = await this.authRepository.findOneByEmail(signUpDto.email);
         if (user) {
             throw new BadRequestException('해당 이메일은 이미 사용중입니다.');
@@ -19,7 +19,7 @@ export class AuthService {
         return await this.authRepository.signUp(signUpDto);
     }
 
-    public findOneById = async (userId: number): Promise<User> => {
+    public findOneById = async (userId: number): Promise<UserEntity> => {
         const user = await this.authRepository.findOneById(userId);
         if (!user) {
             throw new UnauthorizedException('해당 id의 유저가 없습니다.');
