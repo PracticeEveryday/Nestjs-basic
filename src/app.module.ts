@@ -9,12 +9,12 @@ import { WinstonModule, utilities as nestWinstonModuleUtilities } from 'nest-win
 import winston from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 
-import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { HttpExceptionFilter } from './common/exception/http-exception.filter';
 import { HttpResponseInterceptor } from './common/interceptor/http-response.interceptor';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { DatabaseModule } from './database/database.module';
+import { UserModule } from './user/user.module';
 
 @Module({
     imports: [
