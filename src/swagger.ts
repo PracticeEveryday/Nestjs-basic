@@ -23,17 +23,14 @@ export function setupSwagger(app: INestApplication): void {
         .setTitle('nestjsbasic')
         .setDescription(swaggerInfo)
         .setVersion('0.0.1')
-        .addBearerAuth(
-            {
-                description: '인증서버에서 받은 accessToken을 집어넣어주세요',
-                name: 'Authorization',
-                bearerFormat: 'Bearer',
-                scheme: 'Bearer',
-                type: 'http',
-                in: 'Header',
-            },
-            'accessToken'
-        )
+        .addBearerAuth({
+            description: '인증서버에서 받은 accessToken을 집어넣어주세요',
+            name: 'Authorization',
+            bearerFormat: 'Bearer',
+            scheme: 'Bearer',
+            type: 'http',
+            in: 'Header',
+        })
         .build();
 
     const document = SwaggerModule.createDocument(app, options);
