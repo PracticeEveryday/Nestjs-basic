@@ -23,7 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     async validate(payload: CustomPayload) {
         const { userId } = payload;
         const user = await this.authService.findOneById(userId);
-        if (!user) throw new UnauthorizedException();
+        if (!user) throw new UnauthorizedException('해당 userId의 유저가 존재하지 않습니다.');
 
         return user;
     }

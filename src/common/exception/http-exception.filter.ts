@@ -1,14 +1,6 @@
-import {
-    ExceptionFilter,
-    Catch,
-    ArgumentsHost,
-    HttpException,
-    HttpStatus,
-    UnauthorizedException,
-    Inject,
-    LoggerService,
-} from '@nestjs/common';
+import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus, Inject, LoggerService } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { JsonWebTokenError } from 'jsonwebtoken';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Catch(HttpException)
@@ -21,10 +13,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
         let statusCode = exception.getStatus();
         let error: any;
 
-        if (exception instanceof UnauthorizedException) {
+        if (exception instanceof JsonWebTokenError) {
+            console.log(exception, 1);
             statusCode = exception.getStatus();
             error = exception.getResponse();
         } else if (exception instanceof HttpException) {
+            console.log(exception.message, '2');
             statusCode = exception.getStatus();
             error = exception.getResponse();
         } else {
