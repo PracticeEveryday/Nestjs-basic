@@ -1,6 +1,7 @@
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
 import { setupSwagger } from './swagger';
@@ -16,6 +17,8 @@ async function bootstrap() {
             transformOptions: { enableImplicitConversion: true },
         })
     );
+
+    app.use(cookieParser());
 
     setupSwagger(app);
     const configService = app.get(ConfigService);

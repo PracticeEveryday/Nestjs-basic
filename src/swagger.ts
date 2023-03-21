@@ -31,6 +31,7 @@ export function setupSwagger(app: INestApplication): void {
             type: 'http',
             in: 'Header',
         })
+        .addCookieAuth('refreshToken')
         .build();
 
     const document = SwaggerModule.createDocument(app, options);

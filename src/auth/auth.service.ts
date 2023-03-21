@@ -37,26 +37,27 @@ export class AuthService {
         return user;
     };
 
-    public async signIn(signInDto: SignInReqDto): Promise<{ token: string }> {
+    public async signIn(signInDto: SignInReqDto): Promise<{ accessToken: string; refreshToken: string }> {
         const user = await this.authRepository.findOneByEmail(signInDto.email);
         if (!user) {
             throw new UnauthorizedException('해당 이메일로 가입된 유저가 없습니다.');
         }
 
         const isMatch = await comparePassword(signInDto.password, user.password);
-        console.log(isMatch);
+
         if (!isMatch) {
             throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
         }
-        const token = this.signToken(user.userId);
-        return { token };
+        const { accessToken, refreshToken } = this.signToken(user.userId);
+        return { accessToken, refreshToken };
     }
 
-    private signToken(userId: number): string {
+    private signToken(userId: number): { accessToken: string; refreshToken: string } {
         const payload = { userId };
-        const token = this.jwtService.sign(payload);
+        const accessToken = this.jwtService.sign(payload, { expiresIn: '7d' });
+        const refreshToken = this.jwtService.sign({}, { expiresIn: '30d' });
 
-        return token;
+        return { accessToken, refreshToken };
     }
 
     // @Cron('* * * * *')

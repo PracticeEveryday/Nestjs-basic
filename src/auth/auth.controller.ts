@@ -1,5 +1,6 @@
-import { Body, Controller, Inject, LoggerService, Post, UseGuards } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { Body, Controller, Inject, LoggerService, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { ApiCreatedResponse, ApiOperation, ApiTags, ApiBearerAuth, ApiCookieAuth } from '@nestjs/swagger';
+import { Response, Request } from 'express';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { AuthService } from './auth.service';
@@ -30,16 +31,24 @@ export class AuthController {
         description: '회원 가입 성공',
         type: SignInResDto,
     })
-    public async signIn(@Body() signInDto: SignInReqDto): Promise<SignInResDto> {
+    public async signIn(@Body() signInDto: SignInReqDto, @Res() res: Response) {
         this.logger.log('로그인 로그!');
-        return await this.authService.signIn(signInDto);
+
+        const { refreshToken, accessToken } = await this.authService.signIn(signInDto);
+        const now = new Date();
+        const maxAgeByKr = new Date(now.getTime() + 9 * 60 * 60 * 1000 * 30);
+
+        res.cookie('refreshToken', refreshToken, { expires: maxAgeByKr, httpOnly: true });
+        res.send({ accessToken });
     }
 
     @Post('/guard-test')
     @ApiBearerAuth()
+    @ApiCookieAuth()
     @UseGuards(CustomAuthGuard)
-    public async guardTest() {
+    public async guardTest(@Req() request: Request) {
         this.logger.log('가드테스트!');
+        console.log(request.cookies); // or "request.cookies['cookieKey']"
         return 'test';
     }
 }
