@@ -38,7 +38,7 @@ export class AuthController {
         const maxAge = 9 * 60 * 60 * 1000 * 30;
 
         res.cookie('refreshToken', refreshToken, { maxAge, httpOnly: true });
-        res.setHeader('refreshToken', refreshToken);
+        // res.setHeader('refreshToken', refreshToken);
         res.send({ accessToken });
     }
 
