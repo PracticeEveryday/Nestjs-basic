@@ -35,10 +35,10 @@ export class AuthController {
         this.logger.log('로그인 로그!');
 
         const { refreshToken, accessToken } = await this.authService.signIn(signInDto);
-        const now = new Date();
-        const maxAgeByKr = new Date(now.getTime() + 9 * 60 * 60 * 1000 * 30);
+        const maxAge = 9 * 60 * 60 * 1000 * 30;
 
-        res.cookie('refreshToken', refreshToken, { expires: maxAgeByKr, httpOnly: true });
+        res.cookie('refreshToken', refreshToken, { maxAge, httpOnly: true });
+        res.setHeader('refreshToken', refreshToken);
         res.send({ accessToken });
     }
 
