@@ -28,7 +28,7 @@ export class AuthController {
     @Post('/sign-in')
     @ApiOperation({ summary: '로그인' })
     @ApiCreatedResponse({
-        description: '회원 가입 성공',
+        description: '로그인 성공',
         type: SignInResDto,
     })
     @ApiResponse({
