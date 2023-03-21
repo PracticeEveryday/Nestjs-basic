@@ -1,5 +1,5 @@
 import { Body, Controller, Inject, LoggerService, Post, Req, Res, UseGuards } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOperation, ApiTags, ApiBearerAuth, ApiCookieAuth } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOperation, ApiTags, ApiBearerAuth, ApiCookieAuth, ApiResponse } from '@nestjs/swagger';
 import { Response, Request } from 'express';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
@@ -31,14 +31,26 @@ export class AuthController {
         description: '회원 가입 성공',
         type: SignInResDto,
     })
+    @ApiResponse({
+        status: 200,
+        description: 'Success',
+        headers: {
+            'Set-Cookie': {
+                description: 'Set-Cookie header',
+                schema: {
+                    type: 'string',
+                },
+            },
+        },
+    })
     public async signIn(@Body() signInDto: SignInReqDto, @Res() res: Response) {
         this.logger.log('로그인 로그!');
 
         const { refreshToken, accessToken } = await this.authService.signIn(signInDto);
         const maxAge = 9 * 60 * 60 * 1000 * 30;
+        const cookie = `Authentication=${refreshToken}; HttpOnly=true; Path=/auths; Max-Age=${maxAge};`;
+        res.setHeader('Set-Cookie', cookie);
 
-        res.cookie('refreshToken', refreshToken, { maxAge, httpOnly: true });
-        // res.setHeader('refreshToken', refreshToken);
         res.send({ accessToken });
     }
 
