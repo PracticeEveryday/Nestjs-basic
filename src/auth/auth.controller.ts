@@ -33,7 +33,7 @@ export class AuthController {
     })
     @ApiResponse({
         status: 200,
-        description: 'Success',
+        description: '성공 시 Set-Cookie Header에 RefreshToken이 들어 있습니다.',
         headers: {
             'Set-Cookie': {
                 description: 'Set-Cookie header',
