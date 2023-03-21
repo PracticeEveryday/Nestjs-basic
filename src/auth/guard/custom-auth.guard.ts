@@ -1,4 +1,4 @@
-import { ExecutionContext, HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ExecutionContext, HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
@@ -18,14 +18,12 @@ export class CustomAuthGuard extends AuthGuard('jwt') {
         const { authorization } = request.headers;
 
         if (authorization === undefined) {
-            throw new HttpException('Token 전송 안됨', HttpStatus.UNAUTHORIZED);
+            throw new UnauthorizedException('Token 전송 안됨');
         }
 
         const token = authorization.replace('Bearer ', '');
         request.user = this.validateToken(token);
         return true;
-
-        // return super.canActivate(context);
     }
 
     validateToken(token: string) {
