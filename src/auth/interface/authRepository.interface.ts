@@ -1,7 +1,7 @@
-import { UserEntity } from '🔥/database/entity/user.entity';
+import { UserDto } from '🔥/common/dto/user.dto';
 
 export interface AuthRepository {
-    signUp(user: Partial<UserEntity>): Promise<UserEntity>;
-    findOneByEmail(email: string): Promise<UserEntity | null>;
-    findOneById(id: number): Promise<UserEntity | null>;
+    signUp(user: Partial<UserDto>): Promise<UserDto>;
+    findOneByEmail(email: string): Promise<UserDto | null>;
+    findOneById(id: number): Promise<UserDto | null>;
 }

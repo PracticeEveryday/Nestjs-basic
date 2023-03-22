@@ -5,8 +5,8 @@ import { JsonWebTokenError } from 'jsonwebtoken';
 // import { Cron } from '@nestjs/schedule';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
+import { UserDto } from '🔥/common/dto/user.dto';
 import { comparePassword, hashPassword } from '🔥/common/utils/hash-password.utils';
-import { UserEntity } from '🔥/database/entity/user.entity';
 
 import { AuthRepository } from './interface/authRepository.interface';
 import { SignInReqDto } from './interface/dtos/request/sign-in.req.dto';
@@ -25,7 +25,7 @@ export class AuthService {
         this.secretKey = this.configService.get<string>('JWT_PRIVATE_KEY') || '';
     }
 
-    public signUp = async (signUpDto: SignUpReqDto): Promise<UserEntity> => {
+    public signUp = async (signUpDto: SignUpReqDto): Promise<UserDto> => {
         this.logger.log('회원 가입');
         const user = await this.authRepository.findOneByEmail(signUpDto.email);
         if (user) {
@@ -35,7 +35,7 @@ export class AuthService {
         return await this.authRepository.signUp(signUpDto);
     };
 
-    public findOneById = async (userId: number): Promise<UserEntity> => {
+    public findOneById = async (userId: number): Promise<UserDto> => {
         const user = await this.authRepository.findOneById(userId);
         if (!user) {
             throw new UnauthorizedException('해당 id의 유저가 없습니다.');
