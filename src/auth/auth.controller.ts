@@ -4,10 +4,10 @@ import { Response, Request } from 'express';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { AuthService } from './auth.service';
-import { SignInReqDto } from './dtos/request/sign-in.req.dto';
-import { SignUpReqDto } from './dtos/request/sign-up.req.dto';
-import { SignInResDto } from './dtos/response/sign-in.res.dto';
-import { SignUpResDto } from './dtos/response/sign-up.res.dto';
+import { SignInReqDto } from './interface/dtos/request/sign-in.req.dto';
+import { SignUpReqDto } from './interface/dtos/request/sign-up.req.dto';
+import { SignInResDto } from './interface/dtos/response/sign-in.res.dto';
+import { SignUpResDto } from './interface/dtos/response/sign-up.res.dto';
 import { CustomAuthGuard } from '../common/guard/custom-auth.guard';
 
 @Controller('auths')

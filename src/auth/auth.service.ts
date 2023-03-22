@@ -8,9 +8,9 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { comparePassword, hashPassword } from '🔥/common/utils/hash-password.utils';
 import { UserEntity } from '🔥/database/entity/user.entity';
 
-import { SignInReqDto } from './dtos/request/sign-in.req.dto';
-import { SignUpReqDto } from './dtos/request/sign-up.req.dto';
 import { AuthRepository } from './interface/authRepository.interface';
+import { SignInReqDto } from './interface/dtos/request/sign-in.req.dto';
+import { SignUpReqDto } from './interface/dtos/request/sign-up.req.dto';
 import { AuthRepositoryImpl } from './repository/auth.repository';
 
 @Injectable()

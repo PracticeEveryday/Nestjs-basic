@@ -4,8 +4,8 @@ import { Repository } from 'typeorm';
 
 import { UserEntity } from '🔥/database/entity/user.entity';
 
-import { SignUpReqDto } from '../dtos/request/sign-up.req.dto';
 import { AuthRepository } from '../interface/authRepository.interface';
+import { SignUpReqDto } from '../interface/dtos/request/sign-up.req.dto';
 
 @Injectable()
 export class AuthRepositoryImpl implements AuthRepository {
