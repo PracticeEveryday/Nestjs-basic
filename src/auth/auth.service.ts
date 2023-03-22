@@ -1,5 +1,7 @@
-import { BadRequestException, Inject, Injectable, LoggerService, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, HttpException, Inject, Injectable, LoggerService, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { JsonWebTokenError } from 'jsonwebtoken';
 // import { Cron } from '@nestjs/schedule';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
@@ -14,6 +16,7 @@ import { AuthRepositoryImpl } from './repository/auth.repository';
 export class AuthService {
     constructor(
         private jwtService: JwtService,
+        private configService: ConfigService,
         private authRepository: AuthRepositoryImpl,
         @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService
     ) {}
@@ -55,9 +58,33 @@ export class AuthService {
     private signToken(userId: number): { accessToken: string; refreshToken: string } {
         const payload = { userId };
         const accessToken = this.jwtService.sign(payload, { expiresIn: '7d' });
-        const refreshToken = this.jwtService.sign({}, { expiresIn: '30d' });
+        const refreshToken = this.jwtService.sign({}, { expiresIn: 5 });
 
         return { accessToken, refreshToken };
+    }
+
+    public validateToken(token: string) {
+        const secretKey = this.configService.get<string>('JWT_PRIVATE_KEY') || '';
+
+        try {
+            const verify = this.jwtService.verify(token, { secret: secretKey });
+            return verify;
+        } catch (e: unknown) {
+            if (e instanceof JsonWebTokenError) {
+                console.log('message: ', e.message);
+                switch (e.message) {
+                    // 토큰에 대한 오류를 판단합니다.
+                    case 'invalid signature':
+                        throw new HttpException(`유효하지 않은 토큰입니다.: ${e.message}`, 401);
+                    case 'jwt malformed':
+                        throw new HttpException(`유효하지 않은 토큰입니다.: ${e.message}`, 401);
+                    case 'jwt expired':
+                        throw new HttpException(`토큰이 만료되었습니다.: ${e.message}`, 410);
+                    default:
+                        throw new HttpException(`서버 오류입니다.: ${e.message}`, 500);
+                }
+            }
+        }
     }
 
     // @Cron('* * * * *')

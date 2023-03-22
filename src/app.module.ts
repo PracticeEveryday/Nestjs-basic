@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -13,6 +13,7 @@ import { AuthModule } from './auth/auth.module';
 import { HttpExceptionFilter } from './common/exception/http-exception.filter';
 import { HttpResponseInterceptor } from './common/interceptor/http-response.interceptor';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { TokenMiddleware } from './common/middleware/token.middleware';
 import { DatabaseModule } from './database/database.module';
 import { UserModule } from './user/user.module';
 
@@ -86,5 +87,9 @@ import { UserModule } from './user/user.module';
 export class AppModule {
     configure(consumer: MiddlewareConsumer) {
         consumer.apply(LoggerMiddleware).forRoutes('*');
+        consumer
+            .apply(TokenMiddleware)
+            .exclude({ path: 'auths/sign-up', method: RequestMethod.POST }, { path: 'auths/sign-in', method: RequestMethod.POST })
+            .forRoutes('*');
     }
 }

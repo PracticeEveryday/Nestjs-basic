@@ -48,7 +48,7 @@ export class AuthController {
 
         const { refreshToken, accessToken } = await this.authService.signIn(signInDto);
         const maxAge = 9 * 60 * 60 * 1000 * 30;
-        const cookie = `Authentication=${refreshToken}; HttpOnly=true; Path=/auths; Max-Age=${maxAge};`;
+        const cookie = `refreshToken=${refreshToken}; HttpOnly=true; Path=/auths; Max-Age=${maxAge};`;
         res.setHeader('Set-Cookie', cookie);
 
         res.send({ accessToken });
@@ -58,9 +58,8 @@ export class AuthController {
     @ApiBearerAuth()
     @ApiCookieAuth()
     @UseGuards(CustomAuthGuard)
-    public async guardTest(@Req() request: Request) {
+    public async guardTest(@Req() req: Request) {
         this.logger.log('가드테스트!');
-        console.log(request.cookies); // or "request.cookies['cookieKey']"
-        return 'test';
+        return { cookies: req.cookies };
     }
 }

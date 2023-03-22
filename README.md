@@ -1,1 +1,6 @@
 # Nestjs-basic
+
+## 만료된 토큰
+
+-   accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY3OTQ0OTk4NSwiZXhwIjoxNjc5NDQ5OTkwfQ.OBAGCI8szO6tnpYJkgHOoPlDREPIZxmvL1TfcxqXq84
+-   refreshToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzk0NDk5ODUsImV4cCI6MTY3OTQ0OTk5MH0.WXDzCcI8CBlcRILE6wk9PTnMq-zG81CAAwleY_uDZRw
