@@ -3,9 +3,9 @@ import { InjectionToken } from 'src/database/injection.token';
 import { Repository } from 'typeorm';
 
 import { UserEntity } from '🔥/database/entitys/user.entity';
-import { AuthRepository } from '🔥/domain/user.domain';
 
 import { SignUpReqDto } from '../dtos/request/sign-up.req.dto';
+import { AuthRepository } from '../interface/authRepository.interface';
 
 @Injectable()
 export class AuthRepositoryImpl implements AuthRepository {
