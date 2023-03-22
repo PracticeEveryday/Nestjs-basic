@@ -6,7 +6,7 @@ import { JsonWebTokenError } from 'jsonwebtoken';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { comparePassword, hashPassword } from '🔥/common/utils/hash-password.utils';
-import { UserEntity } from '🔥/database/entitys/user.entity';
+import { AuthRepository, User } from '🔥/domain/user.domain';
 
 import { SignInReqDto } from './dtos/request/sign-in.req.dto';
 import { SignUpReqDto } from './dtos/request/sign-up.req.dto';
@@ -18,13 +18,13 @@ export class AuthService {
     constructor(
         private jwtService: JwtService,
         private configService: ConfigService,
-        private authRepository: AuthRepositoryImpl,
+        @Inject(AuthRepositoryImpl) private authRepository: AuthRepository,
         @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService
     ) {
         this.secretKey = this.configService.get<string>('JWT_PRIVATE_KEY') || '';
     }
 
-    public signUp = async (signUpDto: SignUpReqDto): Promise<UserEntity> => {
+    public signUp = async (signUpDto: SignUpReqDto): Promise<User> => {
         this.logger.log('회원 가입');
         const user = await this.authRepository.findOneByEmail(signUpDto.email);
         if (user) {
@@ -34,7 +34,7 @@ export class AuthService {
         return await this.authRepository.signUp(signUpDto);
     };
 
-    public findOneById = async (userId: number): Promise<UserEntity> => {
+    public findOneById = async (userId: number): Promise<User> => {
         const user = await this.authRepository.findOneById(userId);
         if (!user) {
             throw new UnauthorizedException('해당 id의 유저가 없습니다.');
