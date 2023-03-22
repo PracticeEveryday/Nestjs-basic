@@ -60,8 +60,8 @@ export class AuthService {
 
     private signToken = (userId: number): { accessToken: string; refreshToken: string } => {
         const payload = { userId };
-        const accessToken = this.jwtService.sign(payload, { expiresIn: '7d' });
-        const refreshToken = this.jwtService.sign({}, { expiresIn: 5 });
+        const accessToken = this.jwtService.sign(payload, { expiresIn: 5 });
+        const refreshToken = this.jwtService.sign({}, { expiresIn: 7 });
 
         return { accessToken, refreshToken };
     };
@@ -108,21 +108,35 @@ export class AuthService {
     };
 
     public reissueTokenFlow = (accessToken: string, refreshToken: string) => {
-        const decodedAccessToken = this.jwtService.verify(accessToken, { secret: this.secretKey });
+        let flag = 0;
         const { userId } = this.decodeJWT(accessToken);
-        const decodedRefreshToken = this.jwtService.verify(refreshToken, { secret: this.secretKey });
 
-        // access 만료 decoded 만료
+        const decodedAccessToken = this.tokenVerify(accessToken);
+        const decodedRefreshToken = this.tokenVerify(refreshToken);
+        console.log(decodedRefreshToken, 'decodedRefreshToken');
         if (decodedAccessToken instanceof JsonWebTokenError && decodedRefreshToken instanceof JsonWebTokenError) {
             throw new UnauthorizedException('다시 로그인 해주세요');
         } else if (decodedAccessToken instanceof JsonWebTokenError) {
+            flag = 1;
             const { accessToken: newAccess, refreshToken: newRefresh } = this.signToken(userId);
-            return { accessToken: newAccess, refreshToken: newRefresh };
+            return { newAccess, newRefresh, flag };
         } else if (decodedRefreshToken instanceof JsonWebTokenError) {
+            flag = 2;
             const { accessToken: newAccess, refreshToken: newRefresh } = this.signToken(userId);
-            return { accessToken: newAccess, refreshToken: newRefresh };
+            return { newAccess, newRefresh, flag };
         } else {
-            return;
+            flag = 3;
+            return { flag };
+        }
+    };
+
+    private tokenVerify = (token: string) => {
+        try {
+            const decoded = this.jwtService.verify(token, { secret: this.secretKey });
+
+            return decoded;
+        } catch (error) {
+            if (error instanceof JsonWebTokenError) return error;
         }
     };
 
