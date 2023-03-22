@@ -11,7 +11,7 @@ export class CustomAuthGuard extends AuthGuard('jwt') {
         super();
     }
 
-    override canActivate(context: ExecutionContext) {
+    override canActivate(context: ExecutionContext): boolean {
         const request = context.switchToHttp().getRequest();
 
         const { authorization } = request.headers;
@@ -21,7 +21,8 @@ export class CustomAuthGuard extends AuthGuard('jwt') {
         }
 
         const token = authorization.replace('Bearer ', '');
-        request.user = this.authService.validateToken(token);
+
+        this.authService.validateToken(token);
         return true;
     }
 

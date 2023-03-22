@@ -43,12 +43,12 @@ export class AuthController {
             },
         },
     })
-    public async signIn(@Body() signInDto: SignInReqDto, @Res() res: Response) {
+    public async signIn(@Body() signInDto: SignInReqDto, @Res() res: Response): Promise<void> {
         this.logger.log('로그인 로그!');
-
+        const MAX_AGE = 9 * 60 * 60 * 1000 * 30;
         const { refreshToken, accessToken } = await this.authService.signIn(signInDto);
-        const maxAge = 9 * 60 * 60 * 1000 * 30;
-        const cookie = `refreshToken=${refreshToken}; HttpOnly=true; Path=/auths; Max-Age=${maxAge};`;
+
+        const cookie = `refreshToken=${refreshToken}; HttpOnly=true; Path=/auths; Max-Age=${MAX_AGE};`;
         res.setHeader('Set-Cookie', cookie);
 
         res.send({ accessToken });

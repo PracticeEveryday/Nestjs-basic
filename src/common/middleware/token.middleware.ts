@@ -22,8 +22,8 @@ export class TokenMiddleware implements NestMiddleware {
         if (flag === 3) {
             next();
         } else {
-            const maxAge = 9 * 60 * 60 * 1000 * 30;
-            const cookie = `refreshToken=${newRefresh}; HttpOnly=true; Path=/auths; Max-Age=${maxAge};`;
+            const MAX_AGE = 9 * 60 * 60 * 1000 * 30;
+            const cookie = `refreshToken=${newRefresh}; HttpOnly=true; Path=/auths; Max-Age=${MAX_AGE};`;
 
             res.setHeader('Set-Cookie', cookie);
             res.status(HttpStatus.OK).json({ newAccess, newRefresh });
