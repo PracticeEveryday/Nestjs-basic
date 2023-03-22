@@ -14,14 +14,17 @@ import { AuthRepositoryImpl } from './repository/auth.repository';
 
 @Injectable()
 export class AuthService {
+    private secretKey: string;
     constructor(
         private jwtService: JwtService,
         private configService: ConfigService,
         private authRepository: AuthRepositoryImpl,
         @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService
-    ) {}
+    ) {
+        this.secretKey = this.configService.get<string>('JWT_PRIVATE_KEY') || '';
+    }
 
-    public async signUp(signUpDto: SignUpReqDto): Promise<UserEntity> {
+    public signUp = async (signUpDto: SignUpReqDto): Promise<UserEntity> => {
         this.logger.log('회원 가입');
         const user = await this.authRepository.findOneByEmail(signUpDto.email);
         if (user) {
@@ -29,7 +32,7 @@ export class AuthService {
         }
         signUpDto.password = await hashPassword(signUpDto.password);
         return await this.authRepository.signUp(signUpDto);
-    }
+    };
 
     public findOneById = async (userId: number): Promise<UserEntity> => {
         const user = await this.authRepository.findOneById(userId);
@@ -40,7 +43,7 @@ export class AuthService {
         return user;
     };
 
-    public async signIn(signInDto: SignInReqDto): Promise<{ accessToken: string; refreshToken: string }> {
+    public signIn = async (signInDto: SignInReqDto): Promise<{ accessToken: string; refreshToken: string }> => {
         const user = await this.authRepository.findOneByEmail(signInDto.email);
         if (!user) {
             throw new UnauthorizedException('해당 이메일로 가입된 유저가 없습니다.');
@@ -53,21 +56,19 @@ export class AuthService {
         }
         const { accessToken, refreshToken } = this.signToken(user.userId);
         return { accessToken, refreshToken };
-    }
+    };
 
-    private signToken(userId: number): { accessToken: string; refreshToken: string } {
+    private signToken = (userId: number): { accessToken: string; refreshToken: string } => {
         const payload = { userId };
         const accessToken = this.jwtService.sign(payload, { expiresIn: '7d' });
         const refreshToken = this.jwtService.sign({}, { expiresIn: 5 });
 
         return { accessToken, refreshToken };
-    }
+    };
 
-    public validateToken(token: string) {
-        const secretKey = this.configService.get<string>('JWT_PRIVATE_KEY') || '';
-
+    public validateToken = (token: string) => {
         try {
-            const verify = this.jwtService.verify(token, { secret: secretKey });
+            const verify = this.jwtService.verify(token, { secret: this.secretKey });
             return verify;
         } catch (e: unknown) {
             if (e instanceof JsonWebTokenError) {
@@ -85,7 +86,45 @@ export class AuthService {
                 }
             }
         }
-    }
+    };
+
+    public decodeJWT = (token: string) => {
+        if (!token) throw new UnauthorizedException('Token 전송 안됨');
+
+        const base64Url = token.split('.')[1];
+        if (!base64Url) throw new UnauthorizedException('토큰에 문제가 있습니다.');
+
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+            atob(base64)
+                .split('')
+                .map(function (c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                })
+                .join('')
+        );
+
+        return JSON.parse(jsonPayload);
+    };
+
+    public reissueTokenFlow = (accessToken: string, refreshToken: string) => {
+        const decodedAccessToken = this.jwtService.verify(accessToken, { secret: this.secretKey });
+        const { userId } = this.decodeJWT(accessToken);
+        const decodedRefreshToken = this.jwtService.verify(refreshToken, { secret: this.secretKey });
+
+        // access 만료 decoded 만료
+        if (decodedAccessToken instanceof JsonWebTokenError && decodedRefreshToken instanceof JsonWebTokenError) {
+            throw new UnauthorizedException('다시 로그인 해주세요');
+        } else if (decodedAccessToken instanceof JsonWebTokenError) {
+            const { accessToken: newAccess, refreshToken: newRefresh } = this.signToken(userId);
+            return { accessToken: newAccess, refreshToken: newRefresh };
+        } else if (decodedRefreshToken instanceof JsonWebTokenError) {
+            const { accessToken: newAccess, refreshToken: newRefresh } = this.signToken(userId);
+            return { accessToken: newAccess, refreshToken: newRefresh };
+        } else {
+            return;
+        }
+    };
 
     // @Cron('* * * * *')
     // handleCron() {

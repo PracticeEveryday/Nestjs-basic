@@ -17,9 +17,7 @@ export class TokenMiddleware implements NestMiddleware {
 
         const accessToken = authorization.replace('Bearer ', '');
 
-        const validation = this.authService.validateToken(refreshToken);
-        const validation2 = this.authService.validateToken(accessToken);
-        console.log(validation, validation2);
+        this.authService.reissueTokenFlow(accessToken, refreshToken);
 
         next();
     }
