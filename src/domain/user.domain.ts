@@ -7,7 +7,7 @@ export class UserDomain {
     ) {}
 }
 
-export interface User {
+export interface UserInterface {
     readonly userId: number;
     readonly userName: string;
     readonly email: string;
@@ -18,7 +18,7 @@ export interface User {
 }
 
 export interface AuthRepository {
-    signUp(user: Partial<User>): Promise<User>;
-    findOneByEmail(email: string): Promise<User | null>;
-    findOneById(id: number): Promise<User | null>;
+    signUp(user: Partial<UserInterface>): Promise<UserInterface>;
+    findOneByEmail(email: string): Promise<UserInterface | null>;
+    findOneById(id: number): Promise<UserInterface | null>;
 }
