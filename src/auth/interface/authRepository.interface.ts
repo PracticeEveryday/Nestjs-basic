@@ -1,4 +1,4 @@
-import { UserEntity } from '🔥/database/entitys/user.entity';
+import { UserEntity } from '🔥/database/entity/user.entity';
 
 export interface AuthRepository {
     signUp(user: Partial<UserEntity>): Promise<UserEntity>;

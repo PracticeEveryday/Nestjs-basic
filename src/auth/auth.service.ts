@@ -6,7 +6,7 @@ import { JsonWebTokenError } from 'jsonwebtoken';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { comparePassword, hashPassword } from '🔥/common/utils/hash-password.utils';
-import { UserEntity } from '🔥/database/entitys/user.entity';
+import { UserEntity } from '🔥/database/entity/user.entity';
 
 import { SignInReqDto } from './dtos/request/sign-in.req.dto';
 import { SignUpReqDto } from './dtos/request/sign-up.req.dto';

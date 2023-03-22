@@ -4,7 +4,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { JwtPayload } from 'jsonwebtoken';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
-import { AuthService } from '../auth.service';
+import { AuthService } from './auth.service';
 
 export type CustomPayload = JwtPayload & {
     userId: number;

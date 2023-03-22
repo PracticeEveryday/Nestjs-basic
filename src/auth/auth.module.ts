@@ -9,7 +9,7 @@ import { userProviders } from '🔥/user/provider/user.provider';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { AuthRepositoryImpl } from './repository/auth.repository';
-import { JwtStrategy } from './strategies/jwt-strategy';
+import { JwtStrategy } from './jwt-strategy';
 
 @Module({
     imports: [
