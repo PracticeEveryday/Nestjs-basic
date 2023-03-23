@@ -114,7 +114,7 @@ export class AuthService {
 
         const decodedAccessToken = this.tokenVerify(accessToken);
         const decodedRefreshToken = this.tokenVerify(refreshToken);
-        console.log(decodedRefreshToken, 'decodedRefreshToken');
+
         if (decodedAccessToken instanceof JsonWebTokenError && decodedRefreshToken instanceof JsonWebTokenError) {
             throw new UnauthorizedException('다시 로그인 해주세요');
         } else if (decodedAccessToken instanceof JsonWebTokenError) {
